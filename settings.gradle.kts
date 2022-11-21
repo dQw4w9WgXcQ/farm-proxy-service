@@ -1,1 +1,1 @@
-rootProject.name = "farm-proxy-service-v2"
+rootProject.name = "farm-proxy-service"

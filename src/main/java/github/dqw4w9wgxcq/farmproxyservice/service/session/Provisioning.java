@@ -32,15 +32,12 @@ public class Provisioning {
             String ip;
             try {
                 var awsCheckIpResult = awsCheckIpService.ping(proxyFactory.create(sessionId, geo));
-                System.out.println("kanker");
-                System.out.println(awsCheckIpResult);
                 if (awsCheckIpResult.latency() > LatencyCheck.MAX_LATENCY) {
                     log.debug("initial ping latency {}", awsCheckIpResult.latency());
                     continue;
                 }
                 ip = awsCheckIpResult.ip();
             } catch (IOException e) {
-                System.out.println("ioe getting ip");
                 log.info("ioe getting ip", e);
                 continue;
             }
@@ -76,9 +73,10 @@ public class Provisioning {
             synchronized (sessionPool) {
                 var accOnIp2 = sessionPool.getAccountForIp(ip);
                 if (accOnIp2 != null) {
-                    log.debug("after stability check, {} already assigned to account {}", ip, accOnIp2);
+                    log.debug("after latency check, {} already assigned to account {}", ip, accOnIp2);
                     continue;
                 }
+                log.debug("adding session {} to account {}", session, account);
                 sessionPool.addSession(account, session);
             }
             return;
@@ -86,5 +84,7 @@ public class Provisioning {
 
         log.debug("couldnt find a good session after 20 tries, banning geo {}", geo);
         geoBanlist.ban(geo);
+
+        sessionPool.removePending(account);
     }
 }

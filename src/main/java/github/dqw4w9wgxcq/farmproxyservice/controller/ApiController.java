@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api")
@@ -29,6 +30,12 @@ public class ApiController {
         }
 
         return sessions;
+    }
+
+    //for debugging
+    @GetMapping("all-sessions")
+    public List<Map<String, Object>> getAllSessions() {
+        return sessionService.getAllSessions().entrySet().stream().map(it -> Map.of("account", it.getKey(), "sessions", it.getValue())).collect(Collectors.toList());
     }
 
     @GetMapping("session")

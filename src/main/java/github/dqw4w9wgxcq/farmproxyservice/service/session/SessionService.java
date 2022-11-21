@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +30,10 @@ public class SessionService {
         }
 
         return session;
+    }
+
+    public Map<String, List<Session>> getAllSessions() {
+        return sessionPool.all();
     }
 
     public Session refreshSession(String account, String geo, String sessionId) {

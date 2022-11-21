@@ -59,4 +59,17 @@ public class SessionPool {
 
         pendingAccounts.add(account);
     }
+
+    public synchronized Map<String, List<Session>> all() {
+        var all = new HashMap<String, List<Session>>();
+        for (var entry : activeSessions.entrySet()) {
+            all.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
+
+        return all;
+    }
+
+    public synchronized void removePending(String account) {
+        pendingAccounts.remove(account);
+    }
 }

@@ -13,7 +13,7 @@ public class ProxyFactory {
     private final ProxyProperties proxyProperties;
 
     public Proxy create(String session, String geo) {
-        log.info("create with id:{} geo:{}", session, geo);
+        log.debug("create with id:{} geo:{}", session, geo);
 
         var split = geo.split("_");
         if (split.length > 2) {
@@ -36,12 +36,14 @@ public class ProxyFactory {
 
         //non us geo has no state
         if (state != null) {
-            sb.append(state);
+            sb.append("_state-").append(state);
         }
 
         sb.append("_session-").append(session).append("_lifetime-24h");
 
         var password = sb.toString();
+
+        log.debug("password:" + password);
         return new Proxy(proxyProperties.address(), proxyProperties.port(), proxyProperties.username(), password);
     }
 }
