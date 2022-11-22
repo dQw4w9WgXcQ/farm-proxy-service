@@ -1,10 +1,9 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.session.latency;
+package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpResult;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
-import github.dqw4w9wgxcq.farmproxyservice.service.session.ProxyFactory;
-import github.dqw4w9wgxcq.farmproxyservice.service.session.SessionIds;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +20,7 @@ public class LatencyCheck {
     private final AwsCheckIpService awsCheckIpService;
     private final ProxyFactory proxyFactory;
 
+    @SneakyThrows
     public long checkLatency(String sessionId, String geo, String ip) throws LatencyCheckException {
         var proxy = proxyFactory.create(sessionId, geo);
 
@@ -42,6 +42,8 @@ public class LatencyCheck {
             }
 
             totalLatency += result.latency();
+
+            Thread.sleep(5000);
         }
 
         return totalLatency / PINGS;

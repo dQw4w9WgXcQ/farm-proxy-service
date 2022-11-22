@@ -2,8 +2,6 @@ package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
 import github.dqw4w9wgxcq.farmproxyservice.service.model.Session;
-import github.dqw4w9wgxcq.farmproxyservice.service.session.latency.LatencyCheck;
-import github.dqw4w9wgxcq.farmproxyservice.service.session.latency.LatencyCheckException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

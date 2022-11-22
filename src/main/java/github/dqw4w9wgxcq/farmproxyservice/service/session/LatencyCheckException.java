@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.session.latency;
+package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
 public class LatencyCheckException extends Exception {
     public LatencyCheckException(String message) {
