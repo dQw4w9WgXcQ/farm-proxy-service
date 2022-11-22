@@ -16,7 +16,6 @@ public class LatencyCheck {
     public static final int MAX_LATENCY = 4000;
     public static final int PINGS = 10;
 
-    private final SessionIds sessionIds;
     private final AwsCheckIpService awsCheckIpService;
     private final ProxyFactory proxyFactory;
 
