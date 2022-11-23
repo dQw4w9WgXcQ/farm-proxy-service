@@ -1,12 +1,14 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
-import github.dqw4w9wgxcq.farmproxyservice.service.model.Session;
+import github.dqw4w9wgxcq.farmproxyservice.service.Session;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@Slf4j
 public class SessionPool {
     private final Map<String, List<Session>> activeSessions = new HashMap<>();
     private final Set<String> pendingAccounts = new HashSet<>();
@@ -62,8 +64,12 @@ public class SessionPool {
 
     public synchronized Map<String, List<Session>> all() {
         var all = new HashMap<String, List<Session>>();
+        //deep clone
         for (var entry : activeSessions.entrySet()) {
-            all.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+            var account = entry.getKey();
+            var sessions = entry.getValue();
+
+            all.put(account, new ArrayList<>(sessions));
         }
 
         return all;

@@ -34,7 +34,7 @@ public class ApiController {
 
     //for debugging
     @GetMapping("all-sessions")
-    public List<Map<String, Object>> getAllSessions() {
+    public List<?> getAllSessions() {
         return sessionService.getAllSessions().entrySet().stream().map(it -> Map.of("account", it.getKey(), "sessions", it.getValue())).collect(Collectors.toList());
     }
 

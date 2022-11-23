@@ -27,15 +27,15 @@ public class FarmProxyServiceApplication {
     private final ProxyFactory proxyFactory;
 
     @GetMapping("ping")
-    public String ping(@RequestParam(required = false) String session, @RequestParam(required = false) String geo) {
+    public String ping(@RequestParam(required = false) String session, @RequestParam String geo) {
         try {
             if (session == null) {
                 session = Long.toString(System.currentTimeMillis());
             }
 
-            var proxyTemplate = proxyFactory.create(session, geo);
-            log.info(proxyTemplate.toString());
-            var result = awsCheckIp.ping(proxyTemplate);
+            var proxy = proxyFactory.create(session, geo);
+            log.info(proxy.toString());
+            var result = awsCheckIp.ping(proxy);
             return result.ip() + " <br>" +
                     result.latency() + "ms<br>" +
                     "<a href=\"https://db-ip.com/" + result.ip() + "\">db-ip</a><br>" +

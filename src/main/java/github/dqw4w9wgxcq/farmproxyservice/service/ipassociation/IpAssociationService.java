@@ -1,13 +1,13 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.session;
+package github.dqw4w9wgxcq.farmproxyservice.service.ipassociation;
 
 import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class IpAssociation {
+public class IpAssociationService {
     private final IpRepository ipRepository;
 
     @Nullable
@@ -15,7 +15,7 @@ public class IpAssociation {
         return null;//todo
     }
 
-    public void associateAccountWithIp(String account, String ip) {
+    public void associateIpWithAccount(String account, String ip) {
 //todo
     }
 }

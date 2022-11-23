@@ -1,6 +1,8 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
-import github.dqw4w9wgxcq.farmproxyservice.service.model.Session;
+import github.dqw4w9wgxcq.farmproxyservice.service.Session;
+import github.dqw4w9wgxcq.farmproxyservice.service.geobanlist.GeoBanlistService;
+import github.dqw4w9wgxcq.farmproxyservice.service.ipassociation.IpAssociationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -15,7 +17,8 @@ import java.util.Map;
 public class SessionService {
     private final SessionPool sessionPool;
     private final Provisioning provisioning;
-    private final GeoBanlist geoBanlist;
+    private final GeoBanlistService geoBanlistService;
+    private final IpAssociationService ipAssociationService;
 
     @Nullable
     public Session getSessionElseProvision(String account, String geo) {
@@ -29,9 +32,11 @@ public class SessionService {
             }
         }
 
+        ipAssociationService.associateIpWithAccount(account, session.ip());
         return session;
     }
 
+    //for debugging
     public Map<String, List<Session>> getAllSessions() {
         return sessionPool.all();
     }

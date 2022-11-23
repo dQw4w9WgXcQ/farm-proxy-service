@@ -1,6 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.awscheckip;
 
-import github.dqw4w9wgxcq.farmproxyservice.service.model.Proxy;
+import github.dqw4w9wgxcq.farmproxyservice.service.Proxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Credentials;

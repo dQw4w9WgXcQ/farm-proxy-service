@@ -1,7 +1,12 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
+import github.dqw4w9wgxcq.farmproxyservice.service.Session;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
-import github.dqw4w9wgxcq.farmproxyservice.service.model.Session;
+import github.dqw4w9wgxcq.farmproxyservice.service.geobanlist.GeoBanlistService;
+import github.dqw4w9wgxcq.farmproxyservice.service.ipassociation.IpAssociationService;
+import github.dqw4w9wgxcq.farmproxyservice.service.ipbanlist.IpBanlistService;
+import github.dqw4w9wgxcq.farmproxyservice.service.pingservice.PingException;
+import github.dqw4w9wgxcq.farmproxyservice.service.pingservice.PingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -16,73 +21,78 @@ public class Provisioning {
     private final SessionIds sessionIds;
     private final AwsCheckIpService awsCheckIpService;
     private final ProxyFactory proxyFactory;
-    private final LatencyCheck latencyCheck;
-    private final IpAssociation ipAssociation;
+    private final PingService pingService;
+    private final IpAssociationService ipAssociationService;
     private final SessionPool sessionPool;
-    private final GeoBanlist geoBanlist;
-    private final IpBanlist ipBanlist;
+    private final GeoBanlistService geoBanlistService;
+    private final IpBanlistService ipBanlistService;
 
     @Async
     public void provisionAsync(String account, String geo) {
-        for (int i = 0; i < 20; i++) {
-            var sessionId = sessionIds.generate();
+        try {
+            for (int i = 0; i < 20; i++) {
+                var sessionId = sessionIds.generate();
 
-            String ip;
-            try {
-                var awsCheckIpResult = awsCheckIpService.ping(proxyFactory.create(sessionId, geo));
-                if (awsCheckIpResult.latency() > LatencyCheck.MAX_LATENCY) {
-                    log.debug("initial ping latency {}", awsCheckIpResult.latency());
+                var proxy = proxyFactory.create(sessionId, geo);
+
+                String ip;
+                try {
+                    var awsCheckIpResult = awsCheckIpService.ping(proxy);
+                    if (awsCheckIpResult.latency() > PingService.LATENCY_LIMIT) {
+                        log.debug("initial ping latency {}", awsCheckIpResult.latency());
+                        continue;
+                    }
+                    ip = awsCheckIpResult.ip();
+                } catch (IOException e) {
+                    log.info("ioe getting ip", e);
                     continue;
                 }
-                ip = awsCheckIpResult.ip();
-            } catch (IOException e) {
-                log.info("ioe getting ip", e);
-                continue;
-            }
 
-            var accOnIp = sessionPool.getAccountForIp(ip);
-            if (accOnIp != null) {
-                log.debug("{} already assigned to account {}", ip, accOnIp);
-                continue;
-            }
-
-            if (ipBanlist.isBanned(ip)) {
-                log.debug("{} is banned", ip);
-                continue;
-            }
-
-            long latency;
-            try {
-                latency = latencyCheck.checkLatency(sessionId, geo, ip);
-            } catch (LatencyCheckException e) {
-                log.debug("stability check failed", e);
-                continue;
-            }
-
-            var session = new Session(sessionId, geo, ip, latency);
-
-            var associatedAccount = ipAssociation.getAssociatedAccount(ip);
-            if (associatedAccount != null) {
-                log.debug("ip {} is already assoicated with {}", ip, associatedAccount);
-                sessionPool.addSession(associatedAccount, session);
-                continue;
-            }
-
-            synchronized (sessionPool) {
-                var accOnIp2 = sessionPool.getAccountForIp(ip);
-                if (accOnIp2 != null) {
-                    log.debug("after latency check, {} already assigned to account {}", ip, accOnIp2);
+                var accOnIp = sessionPool.getAccountForIp(ip);
+                if (accOnIp != null) {
+                    log.debug("{} already assigned to account {}", ip, accOnIp);
                     continue;
                 }
-                log.debug("adding session {} to account {}", session, account);
-                sessionPool.addSession(account, session);
+
+                if (ipBanlistService.isBanned(ip)) {
+                    log.debug("{} is banned", ip);
+                    continue;
+                }
+
+                long latency;
+                try {
+                    latency = pingService.testLatency(proxy, ip, geo);
+                } catch (PingException e) {
+                    log.debug("stability check failed", e);
+                    continue;
+                }
+
+                var session = new Session(sessionId, geo, ip, latency);
+
+                var associatedAccount = ipAssociationService.getAssociatedAccount(ip);
+                if (associatedAccount != null) {
+                    log.debug("ip {} is already assoicated with {}", ip, associatedAccount);
+                    sessionPool.addSession(associatedAccount, session);
+                    continue;
+                }
+
+                synchronized (sessionPool) {
+                    var accOnIpAfter = sessionPool.getAccountForIp(ip);
+                    if (accOnIpAfter != null) {
+                        log.debug("after latency check, {} already assigned to account {}", ip, accOnIpAfter);
+                        continue;
+                    }
+                    log.debug("adding session {} to account {}", session, account);
+                    sessionPool.addSession(account, session);
+                }
+                return;
             }
-            return;
+
+            log.debug("couldnt find a good session after 20 tries, banning geo {}", geo);
+            geoBanlistService.ban(geo);
+        } catch (Exception e) {
+            log.warn("unknown exception while provisioning", e);
+            sessionPool.removePending(account);
         }
-
-        log.debug("couldnt find a good session after 20 tries, banning geo {}", geo);
-        geoBanlist.ban(geo);
-
-        sessionPool.removePending(account);
     }
 }

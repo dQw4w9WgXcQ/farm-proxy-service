@@ -24,6 +24,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.squareup.okhttp3:okhttp")
     implementation("org.mongodb:mongodb-driver-sync")
+    implementation("com.google.guava:guava:31.1-jre")
     runtimeOnly("org.postgresql:postgresql")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

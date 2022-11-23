@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.model;
+package github.dqw4w9wgxcq.farmproxyservice.service;
 
 import lombok.extern.slf4j.Slf4j;
 
