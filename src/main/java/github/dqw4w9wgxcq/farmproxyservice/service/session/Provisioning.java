@@ -90,6 +90,7 @@ public class Provisioning {
 
             log.debug("couldnt find a good session after 20 tries, banning geo {}", geo);
             geoBanlistService.ban(geo);
+            sessionPool.removePending(account);
         } catch (Exception e) {
             log.warn("unknown exception while provisioning", e);
             sessionPool.removePending(account);
