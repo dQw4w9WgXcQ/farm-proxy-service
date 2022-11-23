@@ -1,5 +1,7 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.Session;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
 import github.dqw4w9wgxcq.farmproxyservice.service.geobanlist.GeoBanlistService;
@@ -26,6 +28,7 @@ public class Provisioning {
     private final SessionPool sessionPool;
     private final GeoBanlistService geoBanlistService;
     private final IpBanlistService ipBanlistService;
+    private final IpRepository ipRepository;
 
     @Async
     public void provisionAsync(String account, String geo) {
@@ -47,6 +50,8 @@ public class Provisioning {
                     log.info("ioe getting ip", e);
                     continue;
                 }
+
+                ipRepository.save(Ip.create(ip));
 
                 var accOnIp = sessionPool.getAccountForIp(ip);
                 if (accOnIp != null) {

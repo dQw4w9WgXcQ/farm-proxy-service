@@ -28,7 +28,6 @@ public class PingResult {
     private Long id;
     @CreationTimestamp
     private Instant createdDate;
-    private boolean success;
     @Nullable
     private Long latency;
     @ManyToOne
@@ -36,7 +35,7 @@ public class PingResult {
     @ManyToOne
     private Geo geo;
 
-    public PingResult(boolean success, Long latency, Ip ip, Geo geo) {
-        this(null, null, success, latency, ip, geo);
+    public PingResult(Long latency, Ip ip, Geo geo) {
+        this(null, null, latency, ip, geo);
     }
 }
