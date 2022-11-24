@@ -17,16 +17,19 @@ import java.net.InetSocketAddress;
 public class AwsCheckIpService {
     public AwsCheckIpResult ping(Proxy proxy) throws IOException {
         var inetAddress = new InetSocketAddress(proxy.address(), proxy.port());
-        var auth = Credentials.basic(proxy.username(), proxy.password());
+        var credential = Credentials.basic(proxy.username(), proxy.password());
 
         var client = new OkHttpClient.Builder()
                 .proxy(new java.net.Proxy(java.net.Proxy.Type.HTTP, inetAddress))
+//                .proxyAuthenticator((route, response) -> response.request().newBuilder()
+//                        .header("Proxy-Authorization", credential)
+//                        .build())
                 .addNetworkInterceptor(chain -> {
                     Request request = chain.request()
                             .newBuilder()
-                            .addHeader("Proxy-Authorization", auth)
+                            .addHeader("Proxy-Authorization", credential)
                             //strip default headers to save bandwidth through proxy
-                            .removeHeader("Accept-Encoding")
+//                            .removeHeader("Accept-Encoding")
                             .removeHeader("User-Agent")
                             .removeHeader("Connection")
                             .build();

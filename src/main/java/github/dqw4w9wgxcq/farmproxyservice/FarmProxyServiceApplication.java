@@ -1,5 +1,7 @@
 package github.dqw4w9wgxcq.farmproxyservice;
 
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
 import github.dqw4w9wgxcq.farmproxyservice.service.session.ProxyFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class FarmProxyServiceApplication {
 
     private final AwsCheckIpService awsCheckIp;
     private final ProxyFactory proxyFactory;
+    private final IpRepository ipRepository;
 
     @GetMapping("ping")
     public String ping(@RequestParam(required = false) String session, @RequestParam String geo) {
@@ -45,5 +48,16 @@ public class FarmProxyServiceApplication {
         } catch (IOException e) {
             throw new ServerErrorException("checkip.amazonaws.com ping failed", e);
         }
+    }
+
+    @GetMapping("test")
+    public void test() {
+        ipRepository.save(Ip.create("1.2.3.4"));
+        ipRepository.save(Ip.create("1.2.3.5"));
+        ipRepository.save(Ip.create("1.2.3.6"));
+        ipRepository.save(Ip.create("1.3.3.5"));
+
+        System.out.println(ipRepository.countBySubnetA(1));
+        System.out.println(ipRepository.countBySubnetAAndSubnetBAndSubnetC(1, 2, 3));
     }
 }

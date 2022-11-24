@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IpRepository extends JpaRepository<Ip, String> {
-    long countBySubnetA(short subnetA);
+    long countBySubnetA(int subnetA);
 
-    long countBySubnetAAndSubnetB(short subnetA, short subnetB);
+    long countBySubnetAAndSubnetB(int subnetA, int subnetB);
 
-    long countBySubnetAAndSubnetBAndSubnetC(short subnetA, short subnetB, short subnetC);
+    long countBySubnetAAndSubnetBAndSubnetC(int subnetA, int subnetB, int subnetC);
 }

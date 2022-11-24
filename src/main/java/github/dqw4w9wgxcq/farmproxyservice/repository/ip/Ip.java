@@ -22,22 +22,22 @@ public class Ip {
     private String id;
     @CreationTimestamp
     private Instant createdDate;
-    private short subnetA;
-    private short subnetB;
-    private short subnetC;
-    private short subnetD;
+    private int subnetA;
+    private int subnetB;
+    private int subnetC;
+    private int subnetD;
 
     public static Ip create(String ip) {
         var ints = toInts(ip);
         return new Ip()
                 .id(ip)
-                .subnetA((short) ints[0])
-                .subnetB((short) ints[1])
-                .subnetC((short) ints[2])
-                .subnetD((short) ints[3]);
+                .subnetA(ints[0])
+                .subnetB(ints[1])
+                .subnetC(ints[2])
+                .subnetD(ints[3]);
     }
 
-    public static int[] toInts(String ipv4) {
+    private static int[] toInts(String ipv4) {
         var split = ipv4.split("\\.");
 
         Preconditions.checkArgument(split.length == 4);
