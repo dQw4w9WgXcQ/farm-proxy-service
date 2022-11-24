@@ -1,5 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.pingservice;
 
+import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
 import github.dqw4w9wgxcq.farmproxyservice.repository.geo.GeoRepository;
 import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.repository.pingresult.PingResult;
@@ -54,6 +55,8 @@ public class PingService {
         }
 
         var latency = totalLatency / PINGS;
+
+        geoRepository.save(new Geo(geo));
 
         var pingResult = new PingResult(latency, ipRepository.getReferenceById(ip), geoRepository.getReferenceById(geo));
         pingResultRepository.save(pingResult);

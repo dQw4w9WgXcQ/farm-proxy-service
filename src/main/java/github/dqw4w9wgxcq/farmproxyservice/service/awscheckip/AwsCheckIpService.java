@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -21,20 +22,21 @@ public class AwsCheckIpService {
 
         var client = new OkHttpClient.Builder()
                 .proxy(new java.net.Proxy(java.net.Proxy.Type.HTTP, inetAddress))
-//                .proxyAuthenticator((route, response) -> response.request().newBuilder()
-//                        .header("Proxy-Authorization", credential)
-//                        .build())
+                .proxyAuthenticator((route, response) -> response.request().newBuilder()
+                        .header("Proxy-Authorization", credential)
+                        .build())
                 .addNetworkInterceptor(chain -> {
                     Request request = chain.request()
                             .newBuilder()
                             .addHeader("Proxy-Authorization", credential)
                             //strip default headers to save bandwidth through proxy
-//                            .removeHeader("Accept-Encoding")
+                            .removeHeader("Accept-Encoding")
                             .removeHeader("User-Agent")
                             .removeHeader("Connection")
                             .build();
                     return chain.proceed(request);
                 })
+                .readTimeout(5000, TimeUnit.MILLISECONDS)
                 .build();
 
         var req = new Request.Builder()

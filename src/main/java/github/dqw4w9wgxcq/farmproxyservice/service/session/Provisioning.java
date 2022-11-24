@@ -47,7 +47,7 @@ public class Provisioning {
                     }
                     ip = awsCheckIpResult.ip();
                 } catch (IOException e) {
-                    log.info("ioe getting ip", e);
+                    log.info("ioe getting ip {}", e.toString());
                     continue;
                 }
 
@@ -68,7 +68,7 @@ public class Provisioning {
                 try {
                     latency = pingService.testLatency(proxy, ip, geo);
                 } catch (PingException e) {
-                    log.debug("stability check failed", e);
+                    log.debug("stability check failed {}", e.toString());
                     continue;
                 }
 

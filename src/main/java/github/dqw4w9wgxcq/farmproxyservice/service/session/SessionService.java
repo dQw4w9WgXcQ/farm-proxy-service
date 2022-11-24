@@ -1,6 +1,5 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
 import github.dqw4w9wgxcq.farmproxyservice.repository.geo.GeoRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.Session;
 import github.dqw4w9wgxcq.farmproxyservice.service.geobanlist.GeoBanlistService;
@@ -25,8 +24,6 @@ public class SessionService {
 
     @Nullable
     public Session getSessionElseProvision(String account, String geo) {
-        geoRepository.save(new Geo(geo));
-
         Session session;
         synchronized (sessionPool) {
             session = sessionPool.getSession(account);

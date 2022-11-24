@@ -56,7 +56,8 @@ public class SessionPool {
 
     public synchronized void setPending(String account) {
         if (pendingAccounts.contains(account)) {
-            throw new IllegalStateException("already pending:" + account);
+            log.debug("{} already pending", account);
+            return;
         }
 
         pendingAccounts.add(account);
