@@ -20,7 +20,7 @@ public class ApiController {
     private final SessionService sessionService;
 
     @PostMapping("provision")
-    public Map<String, SessionDto> postProvision(@RequestBody List<ProvisionDto> provisions) {
+    public Map<String, SessionDto> provision(@RequestBody List<ProvisionDto> provisions) {
         var sessions = new HashMap<String, SessionDto>();
         for (var provision : provisions) {
             var session = sessionService.getSessionElseProvision(provision.account(), provision.geo());
@@ -33,8 +33,8 @@ public class ApiController {
     }
 
     //for debugging
-    @GetMapping("all-sessions")
-    public List<?> getAllSessions() {
+    @GetMapping("dump-sessions")
+    public List<?> dumpSessions() {
         return sessionService.getAllSessions().entrySet().stream().map(it -> Map.of("account", it.getKey(), "sessions", it.getValue())).collect(Collectors.toList());
     }
 
