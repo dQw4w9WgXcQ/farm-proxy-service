@@ -51,4 +51,10 @@ public class SessionService {
             return getSessionElseProvision(account, geo);
         }
     }
+
+    public void freeSession(String account, String session) {
+        synchronized (sessionPool){
+            sessionPool.removeSession(account,session);
+        }
+    }
 }

@@ -52,4 +52,9 @@ public class ApiController {
     public void replaceSession(@RequestParam String account, @RequestParam String banIp) {
         throw new Error("todo");//todo
     }
+
+    @PostMapping("free-session")
+    public void freeSession(@RequestParam String account, @RequestParam String session) {
+        sessionService.freeSession(account, session);
+    }
 }
