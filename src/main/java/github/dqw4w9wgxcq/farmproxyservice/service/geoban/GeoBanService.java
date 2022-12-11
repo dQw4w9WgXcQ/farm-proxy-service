@@ -1,7 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.geoban;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
