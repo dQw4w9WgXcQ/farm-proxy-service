@@ -1,5 +1,6 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository.geo;
+package github.dqw4w9wgxcq.farmproxyservice.repository.geoban;
 
+import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
