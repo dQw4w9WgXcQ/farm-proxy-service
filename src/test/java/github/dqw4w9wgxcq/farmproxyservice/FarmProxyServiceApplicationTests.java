@@ -20,5 +20,6 @@ class FarmProxyServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 }
