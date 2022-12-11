@@ -1,6 +1,6 @@
-package github.dqw4w9wgxcq.farmproxyservice.config;
+package github.dqw4w9wgxcq.farmproxyservice;
 
-import github.dqw4w9wgxcq.farmproxyservice.config.properties.ProxyProperties;
+import github.dqw4w9wgxcq.farmproxyservice.properties.ProxyProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;

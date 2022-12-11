@@ -1,29 +1,30 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.pingservice;
+package github.dqw4w9wgxcq.farmproxyservice.service.pingevaluation;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
-import github.dqw4w9wgxcq.farmproxyservice.repository.geo.GeoRepository;
-import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
-import github.dqw4w9wgxcq.farmproxyservice.repository.pingresult.PingResult;
-import github.dqw4w9wgxcq.farmproxyservice.repository.pingresult.PingResultRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.Geo;
+import github.dqw4w9wgxcq.farmproxyservice.repository.GeoRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.PingAssessment;
+import github.dqw4w9wgxcq.farmproxyservice.repository.PingAssessmentRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.Proxy;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpResult;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
-public class PingService {
+public class PingAssessmentService {
     public static final int DELAY = 5000;
     public static final int LATENCY_LIMIT = 4000;
     public static final int PINGS = 10;
 
     private final AwsCheckIpService awsCheckIpService;
-    private final PingResultRepository pingResultRepository;
+    private final PingAssessmentRepository pingAssessmentRepository;
     private final IpRepository ipRepository;
     private final GeoRepository geoRepository;
 
@@ -58,8 +59,8 @@ public class PingService {
 
         geoRepository.save(new Geo(geo));
 
-        var pingResult = new PingResult(latency, ipRepository.getReferenceById(ip), geoRepository.getReferenceById(geo));
-        pingResultRepository.save(pingResult);
+        var pingResult = new PingAssessment(latency, ipRepository.getReferenceById(ip), geoRepository.getReferenceById(geo));
+        pingAssessmentRepository.save(pingResult);
 
         return latency;
     }

@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository.ip;
+package github.dqw4w9wgxcq.farmproxyservice.repository;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
@@ -22,19 +22,19 @@ public class Ip {
     private String id;
     @CreationTimestamp
     private Instant createdDate;
-    private int subnetA;
-    private int subnetB;
-    private int subnetC;
-    private int subnetD;
+    private int a;
+    private int b;
+    private int c;
+    private int d;
 
     public static Ip create(String ip) {
         var ints = toInts(ip);
         return new Ip()
                 .id(ip)
-                .subnetA(ints[0])
-                .subnetB(ints[1])
-                .subnetC(ints[2])
-                .subnetD(ints[3]);
+                .a(ints[0])
+                .b(ints[1])
+                .c(ints[2])
+                .d(ints[3]);
     }
 
     private static int[] toInts(String ipv4) {

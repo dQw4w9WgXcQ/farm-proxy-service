@@ -1,11 +1,12 @@
 package github.dqw4w9wgxcq.farmproxyservice;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
-import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
-import github.dqw4w9wgxcq.farmproxyservice.service.session.ProxyFactory;
+import github.dqw4w9wgxcq.farmproxyservice.service.session.Proxies;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,20 @@ import java.net.SocketTimeoutException;
 @SpringBootApplication
 @RestController
 @RequiredArgsConstructor
-public class FarmProxyServiceApplication {
+public class FarmProxyServiceApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(FarmProxyServiceApplication.class, args);
     }
 
     private final AwsCheckIpService awsCheckIp;
-    private final ProxyFactory proxyFactory;
+    private final Proxies proxies;
     private final IpRepository ipRepository;
+
+    @Override
+    @SneakyThrows
+    public void run(String... args) {
+        log.info("Application Started !!");
+    }
 
     @GetMapping("ping")
     public String ping(@RequestParam(required = false) String session, @RequestParam String geo) {
@@ -36,7 +43,7 @@ public class FarmProxyServiceApplication {
                 session = Long.toString(System.currentTimeMillis());
             }
 
-            var proxy = proxyFactory.create(session, geo);
+            var proxy = proxies.create(session, geo);
             log.info(proxy.toString());
             var result = awsCheckIp.ping(proxy);
             return result.ip() + " <br>" +
@@ -48,16 +55,5 @@ public class FarmProxyServiceApplication {
         } catch (IOException e) {
             throw new ServerErrorException("checkip.amazonaws.com ping failed", e);
         }
-    }
-
-    @GetMapping("test")
-    public void test() {
-        ipRepository.save(Ip.create("1.2.3.4"));
-        ipRepository.save(Ip.create("1.2.3.5"));
-        ipRepository.save(Ip.create("1.2.3.6"));
-        ipRepository.save(Ip.create("1.3.3.5"));
-
-        System.out.println(ipRepository.countBySubnetA(1));
-        System.out.println(ipRepository.countBySubnetAAndSubnetBAndSubnetC(1, 2, 3));
     }
 }

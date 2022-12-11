@@ -1,6 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
-import github.dqw4w9wgxcq.farmproxyservice.config.properties.ProxyProperties;
+import github.dqw4w9wgxcq.farmproxyservice.properties.ProxyProperties;
 import github.dqw4w9wgxcq.farmproxyservice.service.Proxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ProxyFactory {
+public class Proxies {
     private final ProxyProperties proxyProperties;
 
     public Proxy create(String session, String geo) {
@@ -44,6 +44,6 @@ public class ProxyFactory {
         var password = sb.toString();
 
         log.debug("password:" + password);
-        return new Proxy(proxyProperties.address(), proxyProperties.port(), proxyProperties.username(), password);
+        return new Proxy(proxyProperties.address(), proxyProperties.httpPort(), proxyProperties.socksPort(), proxyProperties.username(), password);
     }
 }

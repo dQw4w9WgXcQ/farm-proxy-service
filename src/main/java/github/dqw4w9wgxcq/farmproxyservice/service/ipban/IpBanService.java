@@ -1,15 +1,15 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.ipbanlist;
+package github.dqw4w9wgxcq.farmproxyservice.service.ipban;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IpBanlistService {
+public class IpBanService {
     private final IpRepository ipRepository;
 
     @Autowired
-    public IpBanlistService(IpRepository ipRepository) {
+    public IpBanService(IpRepository ipRepository) {
         this.ipRepository = ipRepository;
     }
 

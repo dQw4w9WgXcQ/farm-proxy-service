@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.service.pingservice;
+package github.dqw4w9wgxcq.farmproxyservice.service.pingevaluation;
 
 public class PingException extends Exception {
     public PingException(String message) {

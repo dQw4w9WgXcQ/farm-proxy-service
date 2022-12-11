@@ -1,8 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.geo.GeoRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.Session;
-import github.dqw4w9wgxcq.farmproxyservice.service.geobanlist.GeoBanlistService;
 import github.dqw4w9wgxcq.farmproxyservice.service.ipassociation.IpAssociationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +16,7 @@ import java.util.Map;
 public class SessionService {
     private final SessionPool sessionPool;
     private final Provisioning provisioning;
-    private final GeoBanlistService geoBanlistService;
     private final IpAssociationService ipAssociationService;
-    private final GeoRepository geoRepository;
 
     @Nullable
     public Session getSessionElseProvision(String account, String geo) {
@@ -34,7 +30,7 @@ public class SessionService {
             }
         }
 
-        ipAssociationService.associateIpWithAccount(account, session.ip());
+        ipAssociationService.associate(account, session.ip());
         return session;
     }
 

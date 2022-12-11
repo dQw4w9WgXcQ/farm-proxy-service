@@ -1,14 +1,11 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository.pingresult;
+package github.dqw4w9wgxcq.farmproxyservice.repository;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
-import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,20 +19,17 @@ import java.time.Instant;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public class PingResult {
+public class GeoBan {
     @Id
     @GeneratedValue
     private Long id;
     @CreationTimestamp
-    private Instant createdDate;
-    @Nullable
-    private Long latency;
-    @ManyToOne
-    private Ip ip;
+    private Instant date;
     @ManyToOne
     private Geo geo;
+    private Reason reason;
 
-    public PingResult(Long latency, Ip ip, Geo geo) {
-        this(null, null, latency, ip, geo);
+    public enum Reason {
+        TOO_MANY_DUPLICATE_IPS
     }
 }

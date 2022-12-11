@@ -17,14 +17,16 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AwsCheckIpService {
     public AwsCheckIpResult ping(Proxy proxy) throws IOException {
-        var inetAddress = new InetSocketAddress(proxy.address(), proxy.port());
+        var inetAddress = new InetSocketAddress(proxy.address(), proxy.httpPort());
         var credential = Credentials.basic(proxy.username(), proxy.password());
 
         var client = new OkHttpClient.Builder()
                 .proxy(new java.net.Proxy(java.net.Proxy.Type.HTTP, inetAddress))
-                .proxyAuthenticator((route, response) -> response.request().newBuilder()
-                        .header("Proxy-Authorization", credential)
-                        .build())
+                .proxyAuthenticator((route, response) ->
+                        response.request().newBuilder()
+                                .header("Proxy-Authorization", credential)
+                                .build()
+                )
                 .addNetworkInterceptor(chain -> {
                     Request request = chain.request()
                             .newBuilder()
