@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository.geoban;
+package github.dqw4w9wgxcq.farmproxyservice.repository.geo;
 
 import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
 import org.springframework.data.jpa.repository.JpaRepository;

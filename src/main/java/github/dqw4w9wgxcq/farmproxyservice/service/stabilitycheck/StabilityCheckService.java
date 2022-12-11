@@ -1,7 +1,7 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.stabilitycheck;
 
 import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
-import github.dqw4w9wgxcq.farmproxyservice.repository.geoban.GeoRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.geo.GeoRepository;
 import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.repository.stabilitycheckresult.StabilityCheckResult;
 import github.dqw4w9wgxcq.farmproxyservice.repository.stabilitycheckresult.StabilityCheckResultRepository;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StabilityCheck {
+public class StabilityCheckService {
     public static final int DELAY = 5000;
     public static final int LATENCY_LIMIT = 4000;
     public static final int PINGS = 10;
