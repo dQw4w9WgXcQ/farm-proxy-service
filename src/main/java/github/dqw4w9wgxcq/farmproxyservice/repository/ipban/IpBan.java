@@ -1,5 +1,6 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository;
+package github.dqw4w9wgxcq.farmproxyservice.repository.ipban;
 
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +20,12 @@ import java.time.Instant;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public class GeoBan {
+public class IpBan {
     @Id
     @GeneratedValue
     private Long id;
     @CreationTimestamp
     private Instant date;
     @ManyToOne
-    private Geo geo;
-    private Reason reason;
-
-    public enum Reason {
-        TOO_MANY_DUPLICATE_IPS
-    }
+    private Ip ip;
 }

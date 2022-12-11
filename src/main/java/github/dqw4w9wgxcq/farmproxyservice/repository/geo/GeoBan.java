@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository;
+package github.dqw4w9wgxcq.farmproxyservice.repository.geo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,9 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.Instant;
 
 @Entity
@@ -17,13 +19,17 @@ import java.time.Instant;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public class Geo {
+public class GeoBan {
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
     @CreationTimestamp
-    private Instant createdDate;
+    private Instant date;
+    @ManyToOne
+    private Geo geo;
+    private Reason reason;
 
-    public Geo(String id) {
-        this(id, null);
+    public enum Reason {
+        TOO_MANY_DUPLICATE_IPS
     }
 }

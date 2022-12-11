@@ -1,7 +1,5 @@
 package github.dqw4w9wgxcq.farmproxyservice.repository.ip;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.Ip;
-import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

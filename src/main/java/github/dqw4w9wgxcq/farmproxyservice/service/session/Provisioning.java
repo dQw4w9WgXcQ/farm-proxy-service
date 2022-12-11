@@ -1,14 +1,14 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.session;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.Ip;
-import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.Session;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
 import github.dqw4w9wgxcq.farmproxyservice.service.geoban.GeoBanService;
 import github.dqw4w9wgxcq.farmproxyservice.service.ipassociation.IpAssociationService;
 import github.dqw4w9wgxcq.farmproxyservice.service.ipban.IpBanService;
-import github.dqw4w9wgxcq.farmproxyservice.service.pingevaluation.PingException;
-import github.dqw4w9wgxcq.farmproxyservice.service.pingevaluation.PingAssessmentService;
+import github.dqw4w9wgxcq.farmproxyservice.service.stabilitycheck.StabilityException;
+import github.dqw4w9wgxcq.farmproxyservice.service.stabilitycheck.StabilityCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -23,7 +23,7 @@ public class Provisioning {
     private final SessionIds sessionIds;
     private final AwsCheckIpService awsCheckIpService;
     private final Proxies proxies;
-    private final PingAssessmentService pingAssessmentService;
+    private final StabilityCheck stabilityCheck;
     private final IpAssociationService ipAssociationService;
     private final SessionPool sessionPool;
     private final GeoBanService geoBanService;
@@ -45,7 +45,7 @@ public class Provisioning {
                 String ip;
                 try {
                     var awsCheckIpResult = awsCheckIpService.ping(proxy);
-                    if (awsCheckIpResult.latency() > PingAssessmentService.LATENCY_LIMIT) {
+                    if (awsCheckIpResult.latency() > StabilityCheck.LATENCY_LIMIT) {
                         log.debug("initial ping latency {}", awsCheckIpResult.latency());
                         continue;
                     }
@@ -70,8 +70,8 @@ public class Provisioning {
 
                 long latency;
                 try {
-                    latency = pingAssessmentService.testLatency(proxy, ip, geo);
-                } catch (PingException e) {
+                    latency = stabilityCheck.assessLatency(proxy, ip, geo);
+                } catch (StabilityException e) {
                     log.debug("stability check failed {}", e.toString());
                     continue;
                 }

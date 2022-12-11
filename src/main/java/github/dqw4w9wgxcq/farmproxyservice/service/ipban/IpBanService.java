@@ -1,6 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.ipban;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

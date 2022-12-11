@@ -1,5 +1,6 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository;
+package github.dqw4w9wgxcq.farmproxyservice.repository.ip;
 
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.Ip;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

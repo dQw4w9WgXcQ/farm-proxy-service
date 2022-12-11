@@ -1,4 +1,4 @@
-package github.dqw4w9wgxcq.farmproxyservice.repository;
+package github.dqw4w9wgxcq.farmproxyservice.repository.ip;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;

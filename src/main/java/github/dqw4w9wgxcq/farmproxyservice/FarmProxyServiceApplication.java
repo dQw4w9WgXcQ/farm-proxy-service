@@ -1,6 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.IpRepository;
+import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.service.awscheckip.AwsCheckIpService;
 import github.dqw4w9wgxcq.farmproxyservice.service.session.Proxies;
 import lombok.RequiredArgsConstructor;
