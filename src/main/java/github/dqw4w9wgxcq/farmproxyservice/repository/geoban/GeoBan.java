@@ -1,5 +1,6 @@
 package github.dqw4w9wgxcq.farmproxyservice.repository.geoban;
 
+import github.dqw4w9wgxcq.farmproxyservice.domain.GeoBanReason;
 import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,9 +29,9 @@ public class GeoBan {
     private Instant date;
     @ManyToOne
     private Geo geo;
-    private Reason reason;
+    private GeoBanReason reason;
 
-    public enum Reason {
-        TOO_MANY_DUPLICATE_IPS
+    public GeoBan(Geo geo, GeoBanReason reason) {
+        this(null, null, geo, reason);
     }
 }

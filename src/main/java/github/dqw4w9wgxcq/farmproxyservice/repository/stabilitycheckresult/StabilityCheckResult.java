@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.lang.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,14 +28,15 @@ public class StabilityCheckResult {
     private Long id;
     @CreationTimestamp
     private Instant date;
+    private Boolean success;
     @Nullable
-    private Long averageLatency;
+    private Integer averageLatency;
     @ManyToOne
     private Ip ip;
     @ManyToOne
     private Geo geo;
 
-    public StabilityCheckResult(Long averageLatency, Ip ip, Geo geo) {
-        this(null, null, averageLatency, ip, geo);
+    public StabilityCheckResult(Boolean success, @Nullable Integer averageLatency, Ip ip, Geo geo) {
+        this(null, null, success, averageLatency, ip, geo);
     }
 }

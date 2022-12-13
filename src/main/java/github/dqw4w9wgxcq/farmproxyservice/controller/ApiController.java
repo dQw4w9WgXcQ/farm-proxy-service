@@ -32,10 +32,13 @@ public class ApiController {
         return sessions;
     }
 
-    //for debugging
-    @GetMapping("dump-sessions")
+    @GetMapping("monitoring/dump-sessions")
     public List<?> dumpSessions() {
-        return sessionService.getAllSessions().entrySet().stream().map(it -> Map.of("account", it.getKey(), "sessions", it.getValue())).collect(Collectors.toList());
+        return sessionService.getAllSessions()
+                .entrySet()
+                .stream()
+                .map(it -> Map.of("account", it.getKey(), "sessions", it.getValue()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("session")

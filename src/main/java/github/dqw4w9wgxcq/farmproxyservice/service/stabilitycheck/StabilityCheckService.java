@@ -1,6 +1,5 @@
 package github.dqw4w9wgxcq.farmproxyservice.service.stabilitycheck;
 
-import github.dqw4w9wgxcq.farmproxyservice.repository.geo.Geo;
 import github.dqw4w9wgxcq.farmproxyservice.repository.geo.GeoRepository;
 import github.dqw4w9wgxcq.farmproxyservice.repository.ip.IpRepository;
 import github.dqw4w9wgxcq.farmproxyservice.repository.stabilitycheckresult.StabilityCheckResult;
@@ -27,21 +26,25 @@ public class StabilityCheckService {
     private final IpRepository ipRepository;
     private final GeoRepository geoRepository;
 
+    //geo and ip must already be persisted
     public long assessLatency(Proxy proxy, String ip, String geo) throws StabilityException {
-        long totalLatency = 0;
-        for (int i = 0; i < PINGS; i++) {
+        int totalLatency = 0;
+        for (int i = 1; i <= PINGS; i++) {
             AwsCheckIpResult result;
             try {
                 result = awsCheckIpService.ping(proxy);
             } catch (IOException e) {
+                saveResult(false, totalLatency, i, ip, geo);
                 throw new StabilityException(e);
             }
 
             if (!ip.equals(result.ip())) {
+                saveResult(false, totalLatency, i, ip, geo);
                 throw new StabilityException("ip changed old:" + ip + " new:" + result.ip());
             }
 
             if (result.latency() > LATENCY_LIMIT) {
+                saveResult(false, totalLatency, i, ip, geo);
                 throw new StabilityException("ping took too long: " + result.latency() + "ms");
             }
 
@@ -54,13 +57,18 @@ public class StabilityCheckService {
             }
         }
 
-        var latency = totalLatency / PINGS;
+        saveResult(true, totalLatency, PINGS, ip, geo);
 
-        geoRepository.save(new Geo(geo));
+        return totalLatency / PINGS;
+    }
 
-        var pingResult = new StabilityCheckResult(latency, ipRepository.getReferenceById(ip), geoRepository.getReferenceById(geo));
+    private void saveResult(boolean success, int totalLatency, int count, String ip, String geo) {
+        var pingResult = new StabilityCheckResult(
+                success,
+                success ? totalLatency / count : null,
+                ipRepository.getReferenceById(ip),
+                geoRepository.getReferenceById(geo)
+        );
         stabilityCheckResultRepository.save(pingResult);
-
-        return latency;
     }
 }

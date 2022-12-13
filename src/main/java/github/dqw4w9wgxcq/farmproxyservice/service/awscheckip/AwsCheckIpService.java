@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class AwsCheckIpService {
+    public static final String AWS_CHECKIP_URL = "http://checkip.amazonaws.com";
+
     public AwsCheckIpResult ping(Proxy proxy) throws IOException {
         var inetAddress = new InetSocketAddress(proxy.address(), proxy.httpPort());
         var credential = Credentials.basic(proxy.username(), proxy.password());
@@ -42,7 +44,7 @@ public class AwsCheckIpService {
                 .build();
 
         var req = new Request.Builder()
-                .url("http://checkip.amazonaws.com")
+                .url(AWS_CHECKIP_URL)
                 .build();
 
         var call = client.newCall(req);
@@ -63,7 +65,7 @@ public class AwsCheckIpService {
 
             log.debug("ip:{} latency:{}", ip, latency);
 
-            return new AwsCheckIpResult(ip, latency);
+            return new AwsCheckIpResult(ip, (int) latency);
         }
     }
 }
